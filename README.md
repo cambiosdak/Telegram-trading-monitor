@@ -1,4 +1,4 @@
-# Telegram trading pannel
+# Telegram trading Monitor
 ## Description
 This bot is only for ***BINANCE FUTURES***
 Features on this bot:

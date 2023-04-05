@@ -37,3 +37,4 @@ npm install puppeteer axios crypto-js telegraf express
 - [Express](https://www.npmjs.com/package/express)
 - [Puppeteer](https://www.npmjs.com/package/puppeteer)
 - [Telegraf](https://www.npmjs.com/package/telegraf)
+- [Binance Connector (SPOT)](https://www.npmjs.com/package/@binance/connector)

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+</head>
+<body>
+<h1><%=symbol%> CHART</h1>
+  <div id="chart"></div>
+<h1>RSI</h1>
+  <div id="rsi"></div>
+  <script>
+var options = {
+  method: 'GET',
+  url: 'https://fapi.binance.com/fapi/v1/klines',
+  params: {symbol: `<%=symbol%>`, interval: `<%=timeframe%>`, limit: '100'},
+  headers: {
+    'X-MBX-APIKEY': '8xcJlZC1MRBEalyu6sfqKSwxYHfqocdyz6ayccNa56htNzNQSCCVZB1KCI5BinJV'
+  }
+};
+let plot = []
+axios.request(options).then(function (response) {
+  let resp = response.data
+  
+  for (i=0; i<resp.length;i++) {
+      let obj = {x:new Date(resp[i][0]), y:[]}
+      obj.y.push(resp[i][1])
+      obj.y.push(resp[i][2])
+      obj.y.push(resp[i][3])
+      obj.y.push(resp[i][4])
+      plot.push(obj)
+  }
+
+  let change
+  let loss = []
+  let gain = []
+  let data = []
+  for (i=0; i<resp.length;i++) {
+    let object = {x:new Date(resp[i][0]), y:[]}
+      object.y.push(resp[0][4])
+      if ( i > 0){
+      change = resp[i][4] - resp[i-1][4]
+      if (change < 0){
+      loss.push(Math.abs(change))
+    }
+    if (change > 0){
+      gain.push(change)
+    }
+  }
+  if (i > 13){
+    let avgLoss = loss.reduce((a, b) => a + b, 0) / loss.length
+    let avgGain = gain.reduce((a, b) => a + b, 0) / gain.length
+    let avgRS = (avgGain/avgLoss)
+    let RSI = (100 - (100 / (1 + avgRS)))
+    object.y.push(RSI)
+    data.push(object)
+  }
+  
+  }
+  
+  let rsiData = {
+  chart: {
+    type: 'line'
+  },
+  xaxis: {
+  type: 'datetime',
+  labels: {
+    datetimeFormatter: {
+        year: 'yyyy',
+        month: 'MMM',
+        day: 'dd MMM',
+        hour: 'HH:mm'
+      }
+    }
+},
+  series: [{
+  data: data
+  }]
+}
+var rsi = new ApexCharts(document.querySelector("#rsi"), rsiData);
+rsi.render();
+}).then(response => {
+  let position
+  let parameter = `recvWindow=60000&timestamp=${Date.now()}`
+	let signatureSymbol = CryptoJS.HmacSHA256(parameter,'<%=apiSecret%>').toString(CryptoJS.enc.Hex)
+	options = {
+	headers: {
+		'X-MBX-APIKEY': `<%=apiKey%>` // APIKEY OF ACCOUNT B
+	},
+	method: 'GET',
+	url: `https://fapi.binance.com/fapi/v2/positionRisk?${parameter}&signature=${signatureSymbol}`
+
+	}
+	axios.request(options).then(async response =>{
+		await response.data
+		current = response.data
+		for (let i = 0; i < current.length; i++) {
+      if (current[i].symbol === '<%=symbol%>' && Math.abs(current[i].positionAmt) > 0 ){
+        position = current[i].entryPrice
+      }
+		}
+let charts = {
+chart: {
+      type: 'line',
+    },
+xaxis: {
+type: 'datetime',
+labels: {
+  datetimeFormatter: {
+      year: 'yyyy',
+      month: 'MMM',
+      day: 'dd MMM',
+      hour: 'HH:mm'
+    }
+  }
+},
+stroke: {
+  width: [1 , 1]
+},
+colors:['#000'],
+  series: [{
+    type: 'candlestick',
+    data: plot
+  },
+  {
+          type: 'line',
+          data: [
+            {
+              x: plot[0].x,
+              y: position
+            }, {
+              x: plot[99].x,
+              y: position
+            }
+          ]
+        }],
+}
+
+let chart = new ApexCharts(document.querySelector("#chart"), charts);
+chart.render();
+
+	}).catch(error => console.log(error))
+}).catch(error =>{ console.error(error)})
+
+  </script>
+</body>
+
+</html>

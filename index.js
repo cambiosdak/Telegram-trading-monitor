@@ -1,7 +1,7 @@
 const {Telegraf, Scenes:{WizardScene, Stage}, session, Markup} = require('telegraf')
 const axios = require('axios')
 const CryptoJS = require('crypto-js')
-const bot = new Telegraf('1066350252:AAFsB1waUL6hGUoqB9JA2ZdJbG-0pO-r-xc')
+const bot = new Telegraf('') // Your own Token API
 var express = require('express')
 var app = express();
 const fs = require('fs')
@@ -10,8 +10,8 @@ let pathfile = path.join(__dirname, '/screenshot.png')
 const symbols = require('./symbols.json')
 const puppeteer = require('puppeteer')
 app.set('view engine', 'ejs')
-let timefr = '1h' //
-app.listen(3000)
+let timefr = '1h' // Change the timeframe of the charts (1h, 4h, 1d, 1m, 3m, 5m, 15m...)
+app.listen(3000) // Change this number to change the port
 // Initialize telegram bot
 bot.start((ctx) => {
     ctx.reply('What would you like to do?', 
@@ -31,8 +31,8 @@ bot.start((ctx) => {
 	)
 } )
 const { Spot } = require('@binance/connector')
-const apiKey = 'mH236IQihFGp22cQ7UegNhKLvNO56T9Lj7kqJB52FhsHC9d1rfLc2DaR57ru9dWQ'
-const apiSecret = '6yD9xdR0BuuK6AEA8y4uSBJv0FZcOCVu0ey3gbId88RpRPptwRIxyE6o5Y4Voe5V'
+const apiKey = '' // Your own key
+const apiSecret = '' // Your own secret
 const client = new Spot(apiKey, apiSecret)
 // AMOUNT TO TRANSFER
 let url = 'https://fapi.binance.com'

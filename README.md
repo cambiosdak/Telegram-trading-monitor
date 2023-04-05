@@ -20,7 +20,13 @@ Features on this bot:
 + Spot Balance
 + Get Updates (This is slow but will send a message for every open position with their respective chart and then update it every half hour)
 
-This bot is to monitor positions in real-time or when required. You can check your balance for **FUTURES USD-M** or **SPOT**. You can ask a chart of the requested symbol and, to be able to achieve this, the bot will create a local server on port ```3000```, run a script using [apexcharts](https://apexcharts.com/javascript-chart-demos/candlestick-charts/) and then use ``puppeteer`` to nagivate in a ``headless browser`` take a screenshot and send it as a message along with the respective position information. 
+This bot is to monitor positions in real-time or when required. You can check your balance for **FUTURES USD-M** or **SPOT**. You can ask a chart of the requested symbol and, to be able to achieve this, the bot will create a local server on port ```3000```, run a script using [apexcharts](https://apexcharts.com/javascript-chart-demos/candlestick-charts/) and then use ``puppeteer`` to nagivate in a ``headless browser`` take a screenshot and send it as a message along with the respective position information. Bot will also plot a position if there's an open position in the symbol of the requested chart.<br /><br />
+Chart Example:<br />
+<img width="484" alt="Screenshot 2023-04-05 161042" src="https://user-images.githubusercontent.com/116052862/230198667-75275b98-5ae7-4953-baeb-255affcff7d3.png">
+<br />
+Positions example:<br />
+<img width="278" alt="Screenshot 2023-04-05 161144" src="https://user-images.githubusercontent.com/116052862/230199450-5ee1ff1b-e430-406f-a532-95e6425cc1df.png">
+
 ## Usage
 Install these packages via npm:
 ```

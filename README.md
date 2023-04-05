@@ -26,4 +26,7 @@ Install these packages via npm:
 ```
 npm install puppeteer axios crypto-js telegraf express
 ```
+Set your TOKEN API KEY in the ``main.js`` and you can change the timeframe for the charts changing ``timefr`` variable, default is ``1h``
 
+## References
+[ApexCharts](https://apexcharts.com/javascript-chart-demos/candlestick-charts/)
